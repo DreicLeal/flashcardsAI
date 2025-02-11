@@ -42,7 +42,7 @@ export default function ChatProvider({
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "Application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: newMessages }),
       });
       const data = await response.json();
@@ -67,6 +67,6 @@ export default function ChatProvider({
 
 export const useChat = () => {
   const context = useContext(ChatContext);
-
+  if (!context) throw new Error("useChat must be used within a Provider");
   return context;
 };
