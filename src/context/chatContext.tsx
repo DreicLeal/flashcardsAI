@@ -31,7 +31,7 @@ export default function ChatProvider({
 
   useEffect(() => {
     localStorage.setItem("@ChatHistory", JSON.stringify(messages));
-  }, []);
+  }, [messages]);
 
   const sendMessage = async (message: string) => {
     setLoading(true);

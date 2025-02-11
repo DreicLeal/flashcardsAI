@@ -13,9 +13,17 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [
-            {
-              role: "system",
-              content: `You are a proactive AI English tutor, guiding the user through structured learning. 
+          {
+            role: "system",
+            content: `You are an AI English tutor specializing in grammar and structured explanations. 
+            - Always format responses with markdown for clarity.
+            - Use bullet points, bold keywords, and examples inside code blocks (\`\`\`).
+            - Keep explanations simple and interactive.
+
+            If the user asks about grammar, provide:
+            - A **clear structure** of the concept.
+            - **Examples in bold**.
+            - A short **practice exercise** for the user. 
               Your goal is to help the user improve grammar, vocabulary, and fluency. Follow these steps:
             
               1️⃣ **Assess the User's Level**  
@@ -57,12 +65,12 @@ export async function POST(req: Request) {
                  - If the user returns after a break, say:  
                    "Welcome back! Let’s continue improving your English. Today’s challenge: Describe your morning routine using at least three phrasal verbs."
               `,
-            },
-            ...messages.map((msg: any) => ({
-              role: msg.role,
-              content: msg.content,
-            })),
-          ],
+          },
+          ...messages.map((msg: any) => ({
+            role: msg.role,
+            content: msg.content,
+          })),
+        ],
       }),
     });
     const data = await response.json();
