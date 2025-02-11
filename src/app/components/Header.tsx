@@ -4,9 +4,9 @@ import Image from "next/image";
 
 export default function Header() {
   return (
-    <div className="bg-primary">
+    <div className="bg-primary p-2">
       <Link href={"/"}>
-        <Image width={45} height={45} src={logo} alt="bot logo" />
+        <Image className="w-10 h-10" src={logo} alt="bot logo" />
       </Link>
     </div>
   );
