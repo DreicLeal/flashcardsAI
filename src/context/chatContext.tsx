@@ -11,6 +11,7 @@ interface IChatContextType {
   messages: IMessage[];
   loading: boolean;
   sendMessage: (message: string) => Promise<void>;
+  clearChat: () => void
 }
 const ChatContext = createContext<IChatContextType | undefined>(undefined);
 
@@ -33,12 +34,17 @@ export default function ChatProvider({
     localStorage.setItem("@ChatHistory", JSON.stringify(messages));
   }, [messages]);
 
+const clearChat = () => {
+  setMessages([])
+}
+
   const sendMessage = async (message: string) => {
     setLoading(true);
     const newMessages: IMessage[] = [
       ...messages,
       { role: "user", content: message },
     ];
+    setMessages((prev)=> [...prev,  {role: "user", content: message}] );
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -56,10 +62,11 @@ export default function ChatProvider({
     }
     setMessages(newMessages);
     setLoading(false);
+    
   };
 
   return (
-    <ChatContext.Provider value={{ messages, loading, sendMessage }}>
+    <ChatContext.Provider value={{ messages, loading, sendMessage, clearChat }}>
       {children}
     </ChatContext.Provider>
   );
