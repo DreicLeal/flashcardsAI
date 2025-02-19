@@ -62,7 +62,6 @@ body {
   color: var(--accent);
 }
 
-/* Hover & Active States */
 .text-accent-hover {
   color: var(--accent-hover);
 }
@@ -79,7 +78,6 @@ body {
   color: var(--secondary-active);
 }
 
-/* Background Colors */
 .bg-primary {
   background-color: var(--primary);
 }
@@ -92,7 +90,6 @@ body {
   background-color: var(--accent);
 }
 
-/* Hover & Active Background Colors */
 .bg-accent-hover {
   background-color: var(--accent-hover);
 }
