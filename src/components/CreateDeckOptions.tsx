@@ -8,9 +8,9 @@ import { useFlashCards } from "@/context/flashCardsContext/flashcardsGameContext
 export default function CreateDeckOptions() {
   const { isFormOpen, setIsFormOpen } = useFlashCards();
   return (
-    <div className="flex flex-col items-center w-[200px] gap-2">
+    <>
       <div>
-        <p>Adicione um arquivo xlsx</p>
+        <p>Adicione um arquivo xls</p>
         <UploadData />
       </div>
       <p className="text-3xl font-semibold">OU</p>
@@ -18,7 +18,7 @@ export default function CreateDeckOptions() {
         <p className="text-center">✨Peça para IA</p>
         <button
           onClick={() => setIsFormOpen(true)}
-          className="relative w-[180px] h-[120px] rounded-md p-2 flex flex-col items-center hover:bg-white/25 transition duration-300"
+          className="relative w-[180px] h-[120px] rounded-md p-2 flex flex-col items-center justify-center hover:bg-white/25 transition duration-300"
         >
           <Image className="w-20 h-20" src={magic} alt="varinha mágica" />
         </button>
@@ -36,6 +36,6 @@ export default function CreateDeckOptions() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

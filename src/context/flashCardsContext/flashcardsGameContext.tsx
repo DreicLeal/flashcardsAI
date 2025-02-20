@@ -1,5 +1,11 @@
 "use client";
-import { createContext, useContext, useState, ChangeEvent } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ChangeEvent,
+  useEffect,
+} from "react";
 import { ICardsContextType, IDeck } from "./flashCardsContextTypes";
 import * as XLSX from "xlsx";
 import { v4 as uuidv4 } from "uuid";
@@ -15,7 +21,24 @@ export default function CardsProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [deckList, setDeckList] = useState<IDeck[]>([]);
+  const [deckList, setDeckList] = useState<IDeck[]>(() => {
+    try {
+      const storedDecks = localStorage.getItem("storedDecks");
+      return storedDecks ? JSON.parse(storedDecks) : [];
+    } catch (error) {
+      console.error("localStorage not defined", error);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("storedDecks", JSON.stringify(deckList));
+    } catch (error) {
+      console.error("Error saving to localStorage", error);
+    }
+  }, [deckList]);
+
   const [flip, setFlip] = useState(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [newDeckData, setNewDeckData] = useState<IDeck | null>(null);
@@ -49,7 +72,7 @@ export default function CardsProvider({
 
   const decksGenerate = async (deckDescription: string) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await fetch("/api/flashcards", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,8 +88,8 @@ export default function CardsProvider({
       console.error(error);
     } finally {
       setModalOpen(true);
-      setLoading(false)
-      setIsFormOpen(false)
+      setLoading(false);
+      setIsFormOpen(false);
     }
   };
 
@@ -87,7 +110,7 @@ export default function CardsProvider({
         setNewDeckData,
         loading,
         setIsFormOpen,
-        isFormOpen
+        isFormOpen,
       }}
     >
       {children}
