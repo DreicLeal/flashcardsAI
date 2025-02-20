@@ -1,31 +1,20 @@
 "use state";
-
-import { IDeck } from "@/context/flashCardsContext/flashCardsContextTypes";
 import { useFlashCards } from "@/context/flashCardsContext/flashcardsGameContext";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 
-type IModalProps = {
-  newDeckData: IDeck | null;
-  setModalOpen: Dispatch<SetStateAction<boolean>>;
-  setNewDeckData: Dispatch<SetStateAction<IDeck | null>>;
-};
-
-export default function ConfirmModal({
-  newDeckData,
-  setModalOpen,
-  setNewDeckData,
-}: IModalProps) {
+export default function ConfirmModal() {
   const [deckName, setDeckName] = useState("");
-  const router = useRouter()
-  const { setDeckList } = useFlashCards();
+  const router = useRouter();
+  const { setDeckList, setModalOpen, setNewDeckData, newDeckData } =
+    useFlashCards();
   const confirmAddition = () => {
     if (newDeckData) {
-        newDeckData.name = deckName
+      newDeckData.name = deckName;
       setDeckList((prev) => [...prev, newDeckData]);
       setModalOpen(false);
       setNewDeckData(null);
-      router.push("/deckList")
+      router.push("/deckList");
     }
   };
   return (
@@ -41,8 +30,7 @@ export default function ConfirmModal({
             </button>
 
             <input
-
-            className="font-bold text-secondary px-2 mt-5"
+              className="font-bold text-secondary px-2 mt-5"
               type="text"
               placeholder={deckName}
               onChange={(e) => setDeckName(e.target.value)}
@@ -83,7 +71,7 @@ export default function ConfirmModal({
               onClick={confirmAddition}
               className="mt-4 bg-primary hover:bg-accent-hover text-white font-semibold px-4 py-2 rounded-lg shadow-md w-full"
             >
-              ✅ Confirm Addition
+              ✅ Confirmar Adição
             </button>
           </div>
         </div>
