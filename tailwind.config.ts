@@ -14,6 +14,10 @@ export default {
         primary: "var(--primary)",
         secondary: "var(--secondary)",
         accent: "var(--accent)",
+        accentHover: "var(--accent-hover)",
+        accentActive: "var(--accent-active)",
+        secondaryHover: "var(--secondary-hover)",
+        secondaryActive: "var(--secondary-active)",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "sans-serif"],

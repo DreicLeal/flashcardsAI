@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
-import ChatProvider from "@/context/chatContext";
+import Header from "../components/Header";
+import CardsProvider from "@/context/flashCardsContext/flashcardsGameContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Lang Chat",
-  description: "Learn english with AI",
+  title: "Flash Cards",
+  description: "Learn Anything",
   icons: {
     icon: "/favicon.png",
   },
@@ -29,16 +29,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ChatProvider>
-
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-[100vh] w-[100vw]`}
-        >
-        <Header />
-        {children}
-        {/* <Footer/> */}
-      </body>
-        </ChatProvider>
+      
+        <CardsProvider>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-[100vh] w-[100vw]`}
+          >
+            <Header />
+            {children}
+            {/* <Footer/> */}
+          </body>
+        </CardsProvider>
+      
     </html>
   );
 }
