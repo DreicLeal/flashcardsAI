@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Flash Cards",
-  description: "Learn Anything",
+  description: "Learn Anything using flashcards",
   icons: {
     icon: "/favicon.png",
   },
