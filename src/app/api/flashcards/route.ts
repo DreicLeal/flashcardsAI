@@ -14,7 +14,7 @@ export const DeckSchema = z.object({
   name: z.string(),
   cards: z.array(FlashcardSchema),
 });
-
+export type IDeckAPISchema = z.infer<typeof DeckSchema>;
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 
 
