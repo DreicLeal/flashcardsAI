@@ -33,11 +33,11 @@ export default function ConfirmModal() {
               className="absolute top-2 right-2 text-gray-600 hover:bg-gray-900 px-2 py-1 rounded-md"
               onClick={cancelAddition}
             >
-              ❌ Close
+              ❌ Fechar
             </button>
             <div>
               <input
-                className="font-bold text-secondary px-2 mt-5"
+                className="font-bold text-secondary px-2 mt-5 outline-none rounded-md"
                 type="text"
                 placeholder={deckName}
                 onChange={(e) => setDeckName(e.target.value)}
