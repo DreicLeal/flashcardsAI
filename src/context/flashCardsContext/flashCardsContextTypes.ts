@@ -16,16 +16,27 @@ export interface ICardsContextType {
   loading: boolean;
   setIsFormOpen: (value: SetStateAction<boolean>) => void;
   isFormOpen: boolean;
+  shufflingDeck: (id: string) => void
+  currentPractice: ICard[]
 }
+
+type ILearnProcess = {
+  [key: string]: number;
+};
 
 export type ICard = {
   id: string;
   term: string;
   definition: string;
+  lastMemory: string | null;
+  lastPractice: Date | null;
+  nextPractice: Date;
+  learnProcess: ILearnProcess;
 };
 
 export type IDeck = {
   id: string;
   name: string;
   cards: ICard[];
+  lastPractice: Date | null;
 };

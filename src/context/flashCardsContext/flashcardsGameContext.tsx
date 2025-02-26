@@ -6,21 +6,29 @@ import {
   ChangeEvent,
   useEffect,
 } from "react";
-import { ICardsContextType, IDeck } from "./flashCardsContextTypes";
+import { ICard, ICardsContextType, IDeck } from "./flashCardsContextTypes";
 import * as XLSX from "xlsx";
 import { v4 as uuidv4 } from "uuid";
+import { IDeckAPISchema } from "@/app/api/flashcards/route";
 
 type IFile = {
   term: string;
   definition: string;
 };
 
-const CardsContext = createContext<ICardsContextType | undefined>(undefined);
+const CardsContext = createContext<ICardsContextType>({} as ICardsContextType);
 export default function CardsProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [flip, setFlip] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [newDeckData, setNewDeckData] = useState<IDeck | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [currentPractice, setCurrentPractice] = useState<ICard[]>([]);
   const [deckList, setDeckList] = useState<IDeck[]>(() => {
     try {
       const storedDecks = localStorage.getItem("storedDecks");
@@ -31,20 +39,28 @@ export default function CardsProvider({
     }
   });
 
+  const shufflingDeck = (id: string) => {
+    const deckFound = deckList.find((deck) => deck.id === id);
+    if (deckFound) {
+      const toShuffleCards = deckFound.cards;
+      for (let i = toShuffleCards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [toShuffleCards[i], toShuffleCards[j]] = [
+          toShuffleCards[j],
+          toShuffleCards[i],
+        ];
+      }
+      setCurrentPractice(toShuffleCards);
+    }
+  };
+
   useEffect(() => {
     try {
       localStorage.setItem("storedDecks", JSON.stringify(deckList));
     } catch (error) {
       console.error("Error saving to localStorage", error);
     }
-  }, [deckList]);
-
-  const [flip, setFlip] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [newDeckData, setNewDeckData] = useState<IDeck | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  }, [deckList, currentIndex]);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     setModalOpen(true);
@@ -56,13 +72,22 @@ export default function CardsProvider({
       const workbook = XLSX.read(data, { type: "array" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData: IFile[] = XLSX.utils.sheet_to_json(sheet);
-      const newDeck = {
+      const newDeck: IDeck = {
         id: uuidv4(),
         name: "New Deck",
+        lastPractice: null,
         cards: jsonData.map((row) => ({
           id: uuidv4(),
           term: row.term,
           definition: row.definition,
+          lastMemory: null,
+          lastPractice: null,
+          nextPractice: new Date(),
+          learnProcess: {
+            poor: 0,
+            fragile: 0,
+            fixed: 0,
+          },
         })),
       };
       setNewDeckData(newDeck);
@@ -82,8 +107,26 @@ export default function CardsProvider({
         throw new Error("Failed to generate flashcards");
       }
 
-      const data: IDeck = await response.json();
-      setNewDeckData(data);
+      const data: IDeckAPISchema = await response.json();
+      const completeDeckData: IDeck = {
+        id: uuidv4(),
+        name: "New Deck",
+        lastPractice: null,
+        cards: data.cards.map((card) => ({
+          id: uuidv4(),
+          term: card.term,
+          definition: card.definition,
+          lastMemory: null,
+          lastPractice: null,
+          nextPractice: new Date(),
+          learnProcess: {
+            poor: 0,
+            fragile: 0,
+            fixed: 0,
+          },
+        })),
+      };
+      setNewDeckData(completeDeckData);
     } catch (error) {
       console.error(error);
     } finally {
@@ -111,6 +154,8 @@ export default function CardsProvider({
         loading,
         setIsFormOpen,
         isFormOpen,
+        currentPractice,
+        shufflingDeck,
       }}
     >
       {children}
