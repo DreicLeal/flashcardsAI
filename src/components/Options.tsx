@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import ConfirmModal from "./ConfirmModal";
 import React from "react";
 import CreateDeckOptions from "./CreateDeckOptions";
 
@@ -19,7 +18,7 @@ export default function Options() {
       >
         Ver meus Decks
       </button>
-      <ConfirmModal />
+
     </div>
   );
 }
