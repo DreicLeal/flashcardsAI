@@ -4,6 +4,7 @@ import Image from "next/image";
 import magic from "../../public/magic-wand.png";
 import AIRequestForm from "./AIRequestForm";
 import { useFlashCards } from "@/context/flashCardsContext/flashcardsGameContext";
+import ConfirmModal from "./ConfirmModal";
 
 export default function CreateDeckOptions() {
   const { isFormOpen, setIsFormOpen } = useFlashCards();
@@ -30,12 +31,13 @@ export default function CreateDeckOptions() {
               className="absolute top-2 right-2 text-gray-600 p-1 rounded-md hover:bg-gray-900"
               onClick={() => setIsFormOpen(false)}
             >
-              ❌ Close
+              ❌ Fechar
             </button>
             <AIRequestForm />
           </div>
         </div>
       )}
+      <ConfirmModal/>
     </>
   );
 }
