@@ -29,15 +29,16 @@ export default function CardsProvider({
   const [loading, setLoading] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentPractice, setCurrentPractice] = useState<ICard[]>([]);
-  const [deckList, setDeckList] = useState<IDeck[]>(() => {
+  const [deckList, setDeckList] = useState<IDeck[]>([] as IDeck[]);
+
+  useEffect(() => {
     try {
       const storedDecks = localStorage.getItem("storedDecks");
-      return storedDecks ? JSON.parse(storedDecks) : [];
+      setDeckList(storedDecks ? JSON.parse(storedDecks) : []);
     } catch (error) {
       console.error("localStorage not defined", error);
-      return [];
     }
-  });
+  }, []);
 
   const shufflingDeck = (id: string) => {
     const deckFound = deckList.find((deck) => deck.id === id);
