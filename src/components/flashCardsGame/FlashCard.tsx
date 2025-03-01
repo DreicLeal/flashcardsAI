@@ -11,13 +11,13 @@ export default function FlashCard({ id }: { id: string }) {
     currentIndex,
     setCurrentIndex,
     setDeckList,
-    deckList,
     currentPractice,
   } = useFlashCards();
 
   const currentCard = currentPractice[currentIndex];
   const router = useRouter();
   const [endOfPractice, setEndOfPractice] = useState(false);
+
   const nextCard = (cards: ICard[], memory: string) => {
     const updatedCard = {
       ...cards[currentIndex],
@@ -28,15 +28,13 @@ export default function FlashCard({ id }: { id: string }) {
         [memory]: (cards[currentIndex]?.learnProcess?.[memory] || 0) + 1,
       },
     };
+    
+    const updatedCards = cards.map((card, index) => index === currentIndex? updatedCard: card)
 
-    const updatedCards = [...cards];
-    updatedCards[currentIndex] = updatedCard;
-
-    const updatedDeckList = deckList.map((deck) =>
-      deck.id === id ? { ...deck, cards: updatedCards } : deck
+    setDeckList((prevDecks) =>
+      prevDecks.map((deck) => deck.id === id? {...deck, cards: updatedCards}: deck)
     );
 
-    setDeckList(updatedDeckList);
     if (currentIndex < cards.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       setFlip(false);
