@@ -60,7 +60,7 @@ export default function CardsProvider({
     } catch (error) {
       console.error("Error saving to localStorage", error);
     }
-  }, [deckList, currentIndex]);
+  }, [deckList]);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     setModalOpen(true);
